@@ -18,11 +18,12 @@ rf.train <- train %>%
   ungroup() %>% 
   rfImpute(Survived ~ ., .)
 
-rf.test <- train[!(train$PassengerId %in% rf.train$PassengerId),] %>% 
+rf.test <- train[!(train$PassengerId %in% rf.train$PassengerId),] %>%
+  select(-Name, -Ticket, -Cabin) %>% 
   rfImpute(Survived ~ . , .)
 
 fit <- randomForest(factor(Survived) ~ Age + Sex + Pclass + Fare + SibSp, 
-                    cutoff = c(.75, .25),  
+                    cutoff = c(.75, .25), 
                     data = rf.train)
 
 validate <- rf.test %>% 
